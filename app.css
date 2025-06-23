@@ -1,0 +1,75 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  background-color: black;
+  color: white;
+}
+body main {
+  display: flex;
+  flex-direction: column;
+  gap: 100px;
+  margin: 1%;
+  padding: 10%;
+  border: solid 5px;
+  border-radius: 15px;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 30px;
+}
+body main .dealer {
+  border: solid 1px #e74c3c;
+  border-radius: 15px;
+}
+body main .player {
+  border: solid 1px #3498db;
+  border-radius: 15px;
+}
+body .action {
+  display: flex;
+  justify-content: center;
+  gap: 15%;
+}
+body .action button {
+  height: 50px;
+  width: 300px;
+  border-radius: 15px;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border: solid 1px white;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+body .action button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+body .action button:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+body .action button#btn-hit {
+  background-color: #3498db;
+}
+body .action button#btn-hit:hover {
+  background-color: #2980b9;
+}
+body .action button#btn-stand {
+  background-color: #2ecc71;
+}
+body .action button#btn-stand:hover {
+  background-color: #27ae60;
+}
+body .action button#btn-restart {
+  background-color: #e74c3c;
+}
+body .action button#btn-restart:hover {
+  background-color: #c0392b;
+}/*# sourceMappingURL=app.css.map */
