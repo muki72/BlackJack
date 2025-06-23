@@ -12,7 +12,7 @@ const btnRestart = document.getElementById('btn-restart');
 
 // fonction pour creer le deck des 52 cartes avec leur couleurs et leur valeurs
 function createDeck() {
-    const labels = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'];
+    const labels = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack (10)', 'Queen (10)', 'King (10)', 'Ace (11)'];
     const suits = ['hearts ♥', 'diamonds ♦', 'spades ♠', 'clubs ♣'];
     const newDeck = [];
 
@@ -31,8 +31,8 @@ function createDeck() {
 
 // fonction pour atribuer une valeur au cartes visage
 function getCardValue(label) {
-    if (label === "Jack" || label === "Queen" || label === "King") return 10;
-    if (label === 'Ace') return 11;
+    if (label === "Jack (10)" || label === "Queen (10)" || label === "King (10)") return 10;
+    if (label === 'Ace (11)') return 11;
     return parseInt(label)
 }
 
@@ -67,7 +67,75 @@ function drawCard(deck) {
     return card;
 }
 
-//  variable des mains du dealer et du joeur
+
+
+// ajoute une carte a la main du joueur
+function playerHit() {
+    const card = drawCard(deck);
+    playerHand.push(card);
+    updateHandDisplay(playerHand, playerHandP);
+
+    const score = calculateScore(playerHand);
+    playerScoreP.textContent = "Score : " + score;
+
+    if (score > 21) {
+        endGame("You lose");
+    }
+}
+
+
+function dealerPlay() {
+    let dealerScore = calculateScore(dealerHand);
+    const playerScore = calculateScore(playerHand);
+
+    function drawNextCard() {
+        dealerScore = calculateScore(dealerHand);
+
+        if (dealerScore < 17) {
+            const card = drawCard(deck);
+            dealerHand.push(card);
+
+            updateHandDisplay(dealerHand, dealerHandP);
+            dealerScoreP.textContent = "Score : " + dealerScore;
+
+            // Attendre 1 seconde avant de tirer la suivante
+            setTimeout(drawNextCard, 1000);
+        } else {
+            // Le croupier arrête de tirer → on compare les scores
+            updateHandDisplay(dealerHand, dealerHandP);
+            dealerScoreP.textContent = "Score : " + dealerScore;
+
+            let message = "";
+            if (dealerScore > 21) {
+                message = "The dealer has passed 21. You win";
+            } else if (dealerScore > playerScore) {
+                message = "Dealer wins";
+            } else if (dealerScore < playerScore) {
+                message = "You win !";
+            } else {
+                message = "Tie";
+            }
+
+            endGame(message);
+        }
+    }
+
+    // Démarrer le processus avec la première carte (ou pas si >= 17)
+    drawNextCard();
+}
+
+
+// fonction pour finir la partie
+function endGame(message) {
+    btnHit.disabled = true;
+    btnStand.disabled = true;
+
+    // Affiche le message dans un paragraphe (tu peux créer un <p id="message"> dans le HTML)
+    document.getElementById('message').textContent = message;
+}
+
+
+//  variable des mains du dealer et du joueur
 let playerHand = [];
 let dealerHand = [];
 
@@ -85,6 +153,8 @@ function restartGame() {
 
     dealerHand.push(drawCard(deck));
 
+
+
     // Affichage
     updateHandDisplay(playerHand, playerHandP);
     updateHandDisplay(dealerHand, dealerHandP);
@@ -92,7 +162,11 @@ function restartGame() {
     playerScoreP.textContent = "Score : " + calculateScore(playerHand);
     dealerScoreP.textContent = "Score : " + calculateScore(dealerHand);
 
-    // (Plus tard ici : réactiver les boutons, cacher les messages, etc.)
+    document.getElementById('message').textContent = "";
+    btnHit.disabled = false;
+    btnStand.disabled = false;
+
+
 }
 
 //ajoute les cartes dans les mains et met a jour
@@ -107,7 +181,7 @@ document.getElementById('btn-hit').addEventListener('click', () => {
 });
 
 document.getElementById('btn-stand').addEventListener('click', () => {
-
+    dealerPlay()
 });
 
 document.getElementById('btn-restart').addEventListener('click', () => {
